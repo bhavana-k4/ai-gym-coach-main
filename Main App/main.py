@@ -1,6 +1,7 @@
 import streamlit as st
 import os
 import time
+from dotenv import load_dotenv
 import pandas as pd
 from services.auth.login_wall import render_login_wall
 from services.state.session_defaults import initial_session_defaults
@@ -16,6 +17,7 @@ from services.coaching.llm import LLMCoach
 from services.coaching.tts import TextToSpeech
 from services.coaching.voice_pipeline import VoicePipeline, autoplay_audio
 
+load_dotenv()
   
 def main():
     st.set_page_config(
@@ -48,6 +50,8 @@ def main():
             st.session_state.voice_pipeline = VoicePipeline(llm_coach, tts)
         except Exception as e:
             st.session_state.voice_pipeline = None
+            st.error(f"Voice Pipeline Error: {e}")
+            print("VOICE PIPELINE ERROR:", repr(e))
 
     workout_started = st.session_state.get("workout_started", False)
     
